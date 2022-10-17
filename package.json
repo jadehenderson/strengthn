@@ -30,7 +30,9 @@
   },
   "type": "module",
   "dependencies": {
+    "@antv/g6": "^4.7.8",
     "@types/jest": "^27.0.2",
+    "svelte-g6": "^0.0.4",
     "sveltestrap": "^5.6.3",
     "ts-jest": "^27.0.7"
   }
