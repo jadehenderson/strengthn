@@ -1,10 +1,12 @@
 <script>
-		import { fade, slide, scale, fly } from 'svelte/transition';
+	import { fade, slide, scale, fly } from 'svelte/transition';
 	import { dash, loadDash } from '../../stores/dash';
 	import { groupsStore, loadGroupsStore } from '../../stores/groups';
 	import { onMount } from 'svelte';
 	import Edit from '../../components/editMeeting.svelte';
 	import { jwt } from '../../stores/jwt';
+	import G6 from "@antv/g6";
+	import G6Component from './connections/component.svelte';
 
 	let savedHTML = '';
 	let name;
@@ -37,6 +39,47 @@
 	let connectionSet = new Set()
 	$: size = connectionSet.size
 	
+	const options = {
+		container: "mountNode",
+		width: 400,
+		height: 400,
+		workerEnabled: false
+	};
+
+	const data = {
+		nodes: [
+			{
+				id: "node1",
+				x: 100,
+				y: 200
+			},
+			{
+				id: "node2",
+				x: 300,
+				y: 200
+			},
+			{
+				id: "node3",
+				x: 150,
+				y: 150
+			}
+		],
+		edges: [
+			{
+				source: "node1",
+				target: "node2"
+			},
+			{
+				source: "node2",
+				target: "node3"
+			},
+			{
+				source: "node3",
+				target: "node1"
+			}
+		]
+	};
+
 
 	onMount(async () => {
 		await loadDash();
@@ -436,7 +479,7 @@
 			<div class="percentage"><p><span style="font-size: 42px">{percentage}%</span> Group Met</p></div>
 		</div>
 		<div>
-			<img alt="network" src="/network.png" />
+			<G6Component {G6} {options} {data} />
 		</div>
 	</div>
 	<div class="cardHead">

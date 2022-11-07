@@ -97,7 +97,7 @@
   
   <style>
     .g6-container {
-      height: 500px;
+      height: 300px;
     }
   </style>
   
