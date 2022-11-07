@@ -1,6 +1,6 @@
 <script>
     import G6 from "@antv/g6";
-    import G6Component from "./component.svelte";
+    import G6Component from "../../../components/connections.svelte";
     const options = {
       container: "mountNode",
       width: 400,

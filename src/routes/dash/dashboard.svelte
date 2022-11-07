@@ -6,7 +6,7 @@
 	import Edit from '../../components/editMeeting.svelte';
 	import { jwt } from '../../stores/jwt';
 	import G6 from "@antv/g6";
-	import G6Component from './connections/component.svelte';
+	import G6Component from '../../components/connections.svelte';
 
 	let savedHTML = '';
 	let name;
