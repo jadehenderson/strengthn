@@ -36,50 +36,22 @@
 	let startTimeA;
 	let endTimeA;
 	let locationAA;
-	let connectionSet = new Set()
-	$: size = connectionSet.size
+	let connectionSet = new Set();
+	$: size = connectionSet.size;
 	
 	const options = {
 		container: "mountNode",
 		width: 400,
 		height: 400,
-		workerEnabled: false
+		workerEnabled: false,
+		layout: {
+			type: "circular",
+			radius: 100
+		},
+		defaultNode: {
+			size: 25
+		}
 	};
-
-	const data = {
-		nodes: [
-			{
-				id: "node1",
-				x: 100,
-				y: 200
-			},
-			{
-				id: "node2",
-				x: 300,
-				y: 200
-			},
-			{
-				id: "node3",
-				x: 150,
-				y: 150
-			}
-		],
-		edges: [
-			{
-				source: "node1",
-				target: "node2"
-			},
-			{
-				source: "node2",
-				target: "node3"
-			},
-			{
-				source: "node3",
-				target: "node1"
-			}
-		]
-	};
-
 
 	onMount(async () => {
 		await loadDash();
@@ -100,9 +72,7 @@
 		
 	});
 
-
-
-
+	$: data = { nodes: [], edges: [] };
 
 	$: reactiveUserInfo = userInfo;
 	$: percentage = Math.round((size/total)*100);
@@ -144,12 +114,44 @@
 			// console.log("whos this ", reactiveUserInfo.connections)
 			total = reactiveUserInfo.connections.length -1;
 			// console.log("total", total)
-			}
 		}
+	}
 
-		
-		
-	
+	// generate a list of nodes and their edges
+	$: {
+		if (groups != undefined && user != undefined) {
+			let uname = user[0].fname;
+			uname += " ";
+			uname += user[0].lname;
+			// make an empty set to track members to avoid adding duplicates
+			const addedMembers = new Set();
+
+			data.nodes.push({id: uname, label: uname});
+
+			// for(..of..) syntax introduced in ES6, only supported by modern browsers
+			for (const group of groups) {
+				// assuming that the grouping algorithm produces small groups
+				let members = group.members;
+				members.push(uname);
+				for (let i = 0; i < members.length - 1; i++) {
+					if (members[i] === uname) {
+						continue;
+					}
+					else {
+						if (addedMembers.has(members[i])) continue;
+
+						addedMembers.add(members[i]);
+						data.nodes.push({id: members[i], label: members[i]});
+						for (let j = i + 1; j < members.length; j++) {
+							data.edges.push({source: members[i], target: members[j]});
+						}
+
+					}
+				}
+			}
+			console.log(data);
+		}
+	}
 
 	$: {
 		// console.log(percentage);
@@ -249,9 +251,6 @@
 
 		}
 		return finalMembersHTML
-
-
-
 
 	}
 
