@@ -7,6 +7,7 @@
 	import { jwt } from '../../stores/jwt';
 	import G6 from "@antv/g6";
 	import G6Component from '../../components/connections.svelte';
+	import Modal from '../../components/modal.svelte';
 
 	let savedHTML = '';
 	let name;
@@ -479,6 +480,9 @@
 		</div>
 		<div>
 			<G6Component {G6} {options} {data} />
+		</div>
+		<div>
+			<Modal />
 		</div>
 	</div>
 	<div class="cardHead">
