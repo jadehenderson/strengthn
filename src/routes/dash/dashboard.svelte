@@ -472,6 +472,9 @@
 				{/each}
 			{/if}
 		</div>
+		<div>
+			<Modal />
+		</div>
 		</div>
 		<div class="yourStrengthSection" >
 			<h3 class="topText">Your Strength</h3>
@@ -480,9 +483,6 @@
 		</div>
 		<div>
 			<G6Component {G6} {options} {data} />
-		</div>
-		<div>
-			<Modal />
 		</div>
 	</div>
 	<div class="cardHead">
