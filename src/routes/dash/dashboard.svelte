@@ -41,7 +41,6 @@
 	$: size = connectionSet.size;
 	
 	const options = {
-		container: "mountNode",
 		width: 400,
 		height: 400,
 		workerEnabled: false,
@@ -135,12 +134,10 @@
 				let members = group.members;
 				members.push(uname);
 				for (let i = 0; i < members.length - 1; i++) {
-					if (members[i] === uname) {
+					if (members[i] === uname || addedMembers.has(members[i])) {
 						continue;
 					}
 					else {
-						if (addedMembers.has(members[i])) continue;
-
 						addedMembers.add(members[i]);
 						data.nodes.push({id: members[i], label: members[i]});
 						for (let j = i + 1; j < members.length; j++) {
@@ -150,7 +147,6 @@
 					}
 				}
 			}
-			console.log(data);
 		}
 	}
 
