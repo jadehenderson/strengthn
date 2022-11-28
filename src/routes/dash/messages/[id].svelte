@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
    // import {jwt} from "../../../stores/jwt";
     import {page} from '$app/stores'
+	import { get } from '../../../lib/api';
     $: meh = '';
     let message;
 
@@ -12,13 +13,14 @@
         const unsubscribe = jwt.subscribe(value => {
             njwt = value;
         })
-            const res = await fetch (`https://stengthn.herokuapp.com/user/messages/${id}`, {
+            const res = get(`user/messages/${id}`, njwt);
+            /*await fetch (`https://stengthn.herokuapp.com/user/messages/${id}`, {
             method: "GET",
             headers:{
                 'Content-Type': 'application/json',
                 "token": JSON.stringify(njwt),
             },
-        });
+        });*/
         const groupmessages = await res.json();
         meh = groupmessages;
         // return {props: {groupmessages}};
@@ -31,13 +33,14 @@
         const unsubscribe = jwt.subscribe(value => {
             njwt = value;
         })
-            const res = await fetch (`https://stengthn.herokuapp.com/user/messages/${id}`, {
+            const res = await get(`user/messages/${id}`, njwt);
+            /*await fetch (`https://stengthn.herokuapp.com/user/messages/${id}`, {
             method: "GET",
             headers:{
                 'Content-Type': 'application/json',
                 "token": JSON.stringify(njwt),
             },
-        });
+        });*/
         const groupmessagesA = await res.json();
         // console.log(groupmessagesA.reverse())
         meh = groupmessagesA
@@ -54,7 +57,14 @@
             njwt = value;
         })
         try {
-            const submit = await fetch(`https://stengthn.herokuapp.com/user/messages/${id}`, {
+            const submit = post({
+                path: `user/messages/${id}`,
+                data: {
+                    message
+                },
+                token: njwt
+            });
+            /*await fetch(`https://stengthn.herokuapp.com/user/messages/${id}`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,7 +73,7 @@
                 body: JSON.stringify({
                     message
                 }),
-            });           
+            });*/
             const predata = await submit;
             const data = await submit.json();
           
@@ -86,17 +96,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+<!-- I have no clue what this stuff is supposed to be -->
 
 <!-- <h1> Group {`${groupmessages[0].groupid}'s`} Messages</h1> -->
 

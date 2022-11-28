@@ -2,6 +2,7 @@
 	import { jwt } from '/src/stores/jwt.js';
 	import { goto } from '$app/navigation';
 	import { fade, slide, scale, fly } from 'svelte/transition';
+	import { post } from '../../lib/api';
 
 	let fname;
 	let lname;
@@ -16,7 +17,16 @@
 		console.log(lname)
 
 		try {
-			const submit = await fetch('https://stengthn.herokuapp.com/auth/register/', {
+			const submit = await post({
+				path: 'auth/register/',
+				data: {
+					fname: efname,
+					lname: lname,
+					email,
+					password
+				}
+			});
+			/*await fetch('https://stengthn.herokuapp.com/auth/register/', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -27,7 +37,7 @@
 					email,
 					password
 				})
-			});
+			});*/
 
 			const predata = await submit;
 			const data = await submit.json();

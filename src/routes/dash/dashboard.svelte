@@ -376,7 +376,18 @@
 
 
 		try {
-			const submit = await fetch(`https://stengthn.herokuapp.com/user/group/${id}`, {
+			const submit = await post({
+				path: `user/group/${id}`, 
+				data: {
+					loc: locationAA,
+					startTime: startTimeA,
+					endTime: endTimeA,
+					date: fixDateSubmit(dateA),
+					groupName: groupNameA
+				},
+				token: $jwt
+			});
+			/*await fetch(`https://stengthn.herokuapp.com/user/group/${id}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -389,7 +400,7 @@
 					date: fixDateSubmit(dateA),
 					groupName: groupNameA
 				}),
-			});
+			});*/
 
 			
 			

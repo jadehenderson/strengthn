@@ -7,6 +7,7 @@
 	import { jwt } from '../../stores/jwt';
 	import { onMount } from 'svelte';
 	import { groupidS } from '../../stores/groupid';
+	import { get } from '../../lib/api';
 
 	$: meh = '';
 	let message;
@@ -23,13 +24,15 @@
 
 	export const loadGroups = async () => {
 		try {
-			const groupsfetch = await fetch('https://stengthn.herokuapp.com/user/groups', {
+			// why doesn't this just use the groupsStore directly?
+			const groupsfetch = await get('user/groups', $jwt);
+			/*await fetch('https://stengthn.herokuapp.com/user/groups', {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
 					token: JSON.stringify($jwt)
 				}
-			});
+			});*/
 
 			const groupsfetched = await groupsfetch.json();
 			groupsF = groupsfetched;

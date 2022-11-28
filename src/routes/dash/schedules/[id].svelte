@@ -48,7 +48,15 @@
 		}
 
 		try {
-			const result = await fetch(`https://stengthn.herokuapp.com/user/schedules/${id}`, {
+			const result = await post({
+				path: `user/schedules/${id}`,
+				data: {
+					weeks,
+					dates
+				},
+				token: $jwt
+			});
+			/*await fetch(`https://stengthn.herokuapp.com/user/schedules/${id}`, {
 				method: 'POST',
 				body: JSON.stringify({
 					weeks,
@@ -58,7 +66,7 @@
 					'Content-Type': 'application/json',
 					token: JSON.stringify($jwt)
 				}
-			});
+			});*/
 
 			const res = await result.json();
 			console.log(res);
@@ -182,13 +190,14 @@
 		let pathname = window.location.pathname;
 		let arr = pathname.split('/');
 		let id = parseInt(arr[arr.length - 1]);
-		const result = await fetch(`https://stengthn.herokuapp.com/user/schedules/${id}`, {
+		const result = await get(`user/schedules/${id}`, $jwt);
+		/*await fetch(`https://stengthn.herokuapp.com/user/schedules/${id}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
 				token: JSON.stringify($jwt)
 			}
-		});
+		});*/
 		const res = await result.json();
 		schedule = res[0];
 		currentStep = schedule.currentstep;

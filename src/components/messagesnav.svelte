@@ -6,6 +6,7 @@
 	import { goto } from '$app/navigation';
 	import { createEventDispatcher } from 'svelte';
 	import Groupchat from './groupchat.svelte';
+	import { get } from '../lib/api';
 	let groups;
 
 	const dispatch = createEventDispatcher();
@@ -17,13 +18,14 @@
 
 	export const loadGroups = async () => {
 		try {
-			const groupsfetch = await fetch('https://stengthn.herokuapp.com/user/groups', {
+			const groupsfetch = await get('user/groups', $jwt);
+			/*await fetch('https://stengthn.herokuapp.com/user/groups', {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
 					token: JSON.stringify($jwt)
 				}
-			});
+			});*/
 
 			const groupsfetched = await groupsfetch.json();
 			groups = groupsfetched;

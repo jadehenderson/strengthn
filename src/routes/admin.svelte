@@ -1,5 +1,6 @@
 <script>
 	import { fade, slide, scale, fly } from 'svelte/transition';
+	import { post } from '../lib/api';
 	let groups;
 	let password;
 	let organization;
@@ -17,8 +18,18 @@
 		console.log("org", typeof indexMonth)
 		console.log("year", year)
 		console.log("year", typeof year)
+
 		try {
-			const submit = await fetch(`https://stengthn.herokuapp.com/admin/group`, {
+			const submit = await post({
+				path: 'admin/group', 
+				data: {
+					organization,
+					groups,
+					indexMonth,
+					year
+				}
+			});
+			/*await fetch(`https://stengthn.herokuapp.com/admin/group`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -29,7 +40,7 @@
 					indexMonth,
 					year
 				})
-			});
+			});*/
 			const json = await submit.json();
 
 			console.log(json);
