@@ -1,7 +1,5 @@
 <script >
-    import { onMount, createEventDispatcher } from "svelte";
-  
-    const dispatch = createEventDispatcher();
+    import { onMount } from "svelte";
   
     export let G6;
   
@@ -51,17 +49,14 @@
         ...options,
         container
       });
-      dispatch("graphCreated", graph);
   
       if (!isDataEmpty) {
         graph.data(data);
         graph.render();
-        dispatch("graphRendered", graph);
       }
   
       return () => {
         graph.destroy();
-        dispatch("graphDestroyed");
       };
     });
   

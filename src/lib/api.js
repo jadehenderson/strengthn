@@ -7,8 +7,6 @@ async function send({ method, path, data, token }) {
 
     if (data) {
         opts.body = JSON.stringify(data);
-
-        console.log('api', opts.body);
     }
 
     if (token) {

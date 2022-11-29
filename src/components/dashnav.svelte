@@ -1,7 +1,6 @@
 <script>
 	import Signout from '../components/signout.svelte';
-	import { dash } from '../stores/dash';
-	import { loadDash } from '../stores/dash';
+	import { dash, loadDash } from '../stores/dash';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
@@ -40,11 +39,13 @@
 			<p />
 		{:else} 
 		
-		<div class = "prof" >{upperCase(user[0].fname)} {upperCase(user[0].lname)}</div>
-			<div class="nameNLogo">
-				<h1>{user[0].fname} {user[0].lname}</h1>
-				<a href="/dash/profile"><img class="gear" alt="profileGear" src="/gear.png" /></a>
-			</div>
+		<div class = "prof" >
+				{upperCase(user[0].fname)} {upperCase(user[0].lname)}
+		</div>
+		<div class="nameNLogo">
+			<h1>{user[0].fname} {user[0].lname}</h1>
+			<a href="/dash/profile"><img class="gear" alt="profileGear" src="/gear.png" /></a>
+		</div>
 		{/if}
 
 		<ul>
@@ -61,19 +62,21 @@
 
 	.prof{
 		width: 70%;
-		height: 20%;
-  border-radius: 50%;
-  /* background: #2e3951; */
-  background: #fff;
-  font-size: 45px;
-  /* color: #fff; */
-  color: #2e3951;
-  /* color: #fff; */
-  text-align: center;
-  line-height: 150px;
-  margin-left: 17%;
+		height: 0;
+		border-radius: 50%;
+		/* background: #2e3951; */
+		background: #fff;
+		font-size: 45px;
+		/* color: #fff; */
+		color: #2e3951;
+		/* color: #fff; */
+		text-align: center;
+		line-height: 150px;
+		margin-left: 17%;
 		margin-bottom: 13%;
+		padding-bottom: 70%;
 	}
+
 /* 
 	.profilepic {
 	

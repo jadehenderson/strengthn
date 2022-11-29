@@ -7,7 +7,7 @@
 	import { jwt } from '../../stores/jwt';
 	import { onMount } from 'svelte';
 	import { groupidS } from '../../stores/groupid';
-	import { get } from '../../lib/api';
+	import { get, post } from '../../lib/api';
 
 	$: meh = '';
 	let message;
@@ -77,13 +77,14 @@
 		
 
 		try {
-			const res = await fetch(`https://stengthn.herokuapp.com/user/messages/${$groupidS}`, {
+			const res = await get(`user/messages/${$groupidS}`, $jwt);
+			/*await fetch(`https://stengthn.herokuapp.com/user/messages/${$groupidS}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
 					token: JSON.stringify($jwt)
 				}
-			});
+			});*/
 
 			const groupmessagesA = await res.json();
 			meh = Object.values(groupmessagesA).reverse();
@@ -91,7 +92,8 @@
 
 		} catch (err) {
 			try {
-				const res = await fetch(
+				const res = get(`user/messages/${$messages[0].groupid.toString()}`, $jwt);
+				/*await fetch(
 					`https://stengthn.herokuapp.com/user/messages/${$messages[0].groupid.toString()}`,
 					{
 						method: 'GET',
@@ -100,11 +102,10 @@
 							token: JSON.stringify($jwt)
 						}
 					}
-				);
+				);*/
 
 				const groupmessagesA = await res.json();
 				meh = Object.values(groupmessagesA).reverse();
-				
 
 			} catch (err) {
 				console.log(err);
@@ -129,7 +130,14 @@
 	const submit = async () => {
 	
 		try {
-			const submit = await fetch(`https://stengthn.herokuapp.com/user/messages/${$groupidS}`, {
+			const submit = await post({
+				path: `user/messages/${$groupidS}`, 
+				data: {
+					message
+				},
+				token: $jwt
+			});
+			/*await fetch(`https://stengthn.herokuapp.com/user/messages/${$groupidS}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -138,14 +146,21 @@
 				body: JSON.stringify({
 					message
 				})
-			});
+			});*/
 			const predata = await submit;
 			const data = await submit.json();
 
 
 		} catch (err) {
 			try {
-				const submit = await fetch(
+				const submit = post({
+					path: `user/messages/${$messages[0].groupid.toString()}`,
+					data: {
+						message
+					},
+					token: $jwt
+				});
+				/*await fetch(
 					`https://stengthn.herokuapp.com/user/messages/${$messages[0].groupid.toString()}`,
 					{
 						method: 'POST',
@@ -157,7 +172,7 @@
 							message
 						})
 					}
-				);
+				);*/
 				const predata = await submit;
 				const data = await submit.json();
 
@@ -178,11 +193,6 @@
 
 
 	$: reactiveGroupsStore = $groupsStore;
-	
-
-	// $: console.log(reactiveGroupsStore)
-	// console.log($groupidS)
-	// $: console.log(groupnameA)
 </script>
 
 <body in:fly={{ x: -5, duration: 500, delay: 500 }} out:fly={{ x: 5, duration: 500 }}>

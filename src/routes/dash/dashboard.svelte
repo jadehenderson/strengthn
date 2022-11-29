@@ -1,10 +1,10 @@
 <script>
 	import { fade, slide, scale, fly } from 'svelte/transition';
+	import { onMount } from 'svelte';
 	import { dash, loadDash } from '../../stores/dash';
 	import { groupsStore, loadGroupsStore } from '../../stores/groups';
-	import { onMount } from 'svelte';
-	import Edit from '../../components/editMeeting.svelte';
 	import { jwt } from '../../stores/jwt';
+	import Edit from '../../components/editMeeting.svelte';
 	import G6 from "@antv/g6";
 	import G6Component from '../../components/connections.svelte';
 	import Modal from '../../components/modal.svelte';
@@ -79,15 +79,11 @@
 	$: percentage = Math.round((size/total)*100);
 	// TODO: remove hard coded val
 	let total = 5;
+	// groups, newGroupsInfo, and groups all specify the exact same array
+	// of groupings, no clue why it needed to be declared three times
 	$: newGroupsInfo = groupsInfo;
 	$: groups = userInfo.groups;
 	$: user = userInfo.user;
-
-	$: console.log("reactiveUserInfo", reactiveUserInfo);
-	// groups, newGroupsInfo, and groups all specify the exact same array
-	// of groupings, no clue why it needed to be declared three times
-	$: console.log("groupsInfo", groupsInfo);
-	$: console.log("groups", groups);
 
 	$: {
 		for (let i in newGroupsInfo) {
@@ -120,7 +116,7 @@
 		}*/
 
 		if (reactiveUserInfo != undefined && reactiveUserInfo.user != undefined) {
-			if (reactiveUserInfo.user[0].lname = "Henderson") {
+			if (reactiveUserInfo.user[0].lname === "Henderson") {
 				total = 8;
 			}
 		}
@@ -183,7 +179,6 @@
 		}
 		
 	}
-
 	
 
 	function fixDate(dateV) {

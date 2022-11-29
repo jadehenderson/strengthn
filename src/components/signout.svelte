@@ -1,14 +1,14 @@
 <script>
 	import { fade, slide, scale, fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
-	import { jwt } from '/src/stores/jwt.js';
+	import { jwt } from '/src/stores/jwt';
 
 	function signOut() {
-		
-	
+		// erase user info on signout
 		jwt.set(null);
+
+		// return to landing page
 		goto('/');
-	
 	}
 </script>
 
