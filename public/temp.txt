@@ -1,3 +1,0 @@
-this file doesn't do anything
-
-just so that theres git sees the new output directory
