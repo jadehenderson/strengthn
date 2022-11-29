@@ -31,7 +31,6 @@
 	let ELocation;
 	let newGroupsInfo;
 	let groupsInfo;
-	let omg;
 	let groupNameA
 	let dateA;
 	let startTimeA;
@@ -40,6 +39,7 @@
 	let connectionSet = new Set();
 	$: size = connectionSet.size;
 	
+	// parameters for how connection graph will be rendered
 	const options = {
 		width: 400,
 		height: 400,
@@ -72,18 +72,22 @@
 		
 	});
 
+	// actual data that gets rendered
 	$: data = { nodes: [], edges: [] };
 
 	$: reactiveUserInfo = userInfo;
 	$: percentage = Math.round((size/total)*100);
-	$: total = userInfo.connections;
+	// TODO: remove hard coded val
+	let total = 5;
 	$: newGroupsInfo = groupsInfo;
 	$: groups = userInfo.groups;
 	$: user = userInfo.user;
 
-	$: console.log(reactiveUserInfo)
-
-
+	$: console.log("reactiveUserInfo", reactiveUserInfo);
+	// groups, newGroupsInfo, and groups all specify the exact same array
+	// of groupings, no clue why it needed to be declared three times
+	$: console.log("groupsInfo", groupsInfo);
+	$: console.log("groups", groups);
 
 	$: {
 		for (let i in newGroupsInfo) {
@@ -109,11 +113,16 @@
 	}
 
 	$: {
+		// I honestly do not understand how this is supposed to give the total size of an organization
+		/*if (reactiveUserInfo.connections != undefined || Object.keys(reactiveUserInfo).length != 0){
+			total = reactiveUserInfo.connections.length;
+			console.log("total", total)
+		}*/
 
-		if (reactiveUserInfo.connections != undefined || Object.keys(reactiveUserInfo).length != 0  ){
-			// console.log("whos this ", reactiveUserInfo.connections)
-			total = reactiveUserInfo.connections.length -1;
-			// console.log("total", total)
+		if (reactiveUserInfo != undefined && reactiveUserInfo.user != undefined) {
+			if (reactiveUserInfo.user[0].lname = "Henderson") {
+				total = 8;
+			}
 		}
 	}
 
@@ -151,28 +160,20 @@
 	}
 
 	$: {
-		// console.log(percentage);
 		if (percentage == NaN || percentage == 'NaN' || total == 0){
-			// console.log("here")
 			percentage = 0;
 		}
 	}
 
-	
 	$: {
 		for (let i in newGroupsInfo) {
 			
 			if (newGroupsInfo[i].members != null) {
 				for (let j=0; j< (newGroupsInfo[i].members).length; j++ ){
-					// console.log(newGroupsInfo[i].members)
-					if (newGroupsInfo[i].members[j] != `${user[0].fname} ${user[0].lname}`){
-						
+					if (newGroupsInfo[i].members[j] != `${user[0].fname} ${user[0].lname}`){	
 						connectionSet.add(newGroupsInfo[i].members[j])
-						// console.log(connectionSet.size)
 						size = connectionSet.size;
-						// console.log(size)
-						percentage = Math.round((size/total)*100);
-						
+						console.log("size", size);
 					}
 
 				}
@@ -207,16 +208,6 @@
 			
 		}
 	}
-
-	// function connectionsList(){
-
-	// }
-
-
-	// $: function connectionsList(){
-	// 	console.log
-		
-	// }
 
 	function fixTime(timeV) {
 		if (timeV == null) {
@@ -358,7 +349,6 @@
 		
 	}
 
-
 	function clearInput(){
 		locationA = "";
 		groupName = "";
@@ -369,8 +359,6 @@
 		return;
 
 	}
-
-
 
 	const submit = async (id) => {
 
@@ -428,8 +416,6 @@
 		let casedName = name.charAt(0).toUpperCase() + name.slice(1);
 		return casedName;
 	}
-
-	
 
 </script>
 <body in:fly={{ x: -5, duration: 500, delay: 500 }} out:fly={{ x: 5, duration: 500 }}>
