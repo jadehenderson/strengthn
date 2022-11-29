@@ -1,10 +1,13 @@
 <script>
-		import { fade, slide, scale, fly } from 'svelte/transition';
+	import { fade, slide, scale, fly } from 'svelte/transition';
 	import { dash, loadDash } from '../../stores/dash';
 	import { groupsStore, loadGroupsStore } from '../../stores/groups';
 	import { onMount } from 'svelte';
 	import Edit from '../../components/editMeeting.svelte';
 	import { jwt } from '../../stores/jwt';
+	import G6 from "@antv/g6";
+	import G6Component from '../../components/connections.svelte';
+	import Modal from '../../components/modal.svelte';
 
 	let savedHTML = '';
 	let name;
@@ -34,9 +37,21 @@
 	let startTimeA;
 	let endTimeA;
 	let locationAA;
-	let connectionSet = new Set()
-	$: size = connectionSet.size
+	let connectionSet = new Set();
+	$: size = connectionSet.size;
 	
+	const options = {
+		width: 400,
+		height: 400,
+		workerEnabled: false,
+		layout: {
+			type: "circular",
+			radius: 100
+		},
+		defaultNode: {
+			size: 25
+		}
+	};
 
 	onMount(async () => {
 		await loadDash();
@@ -57,9 +72,7 @@
 		
 	});
 
-
-
-
+	$: data = { nodes: [], edges: [] };
 
 	$: reactiveUserInfo = userInfo;
 	$: percentage = Math.round((size/total)*100);
@@ -101,12 +114,41 @@
 			// console.log("whos this ", reactiveUserInfo.connections)
 			total = reactiveUserInfo.connections.length -1;
 			// console.log("total", total)
+		}
+	}
+
+	// generate a list of nodes and their edges
+	$: {
+		if (groups != undefined && user != undefined) {
+			let uname = user[0].fname;
+			uname += " ";
+			uname += user[0].lname;
+			// make an empty set to track members to avoid adding duplicates
+			const addedMembers = new Set();
+
+			data.nodes.push({id: uname, label: uname});
+
+			// for(..of..) syntax introduced in ES6, only supported by modern browsers
+			for (const group of groups) {
+				// assuming that the grouping algorithm produces small groups
+				let members = group.members;
+				members.push(uname);
+				for (let i = 0; i < members.length - 1; i++) {
+					if (members[i] === uname || addedMembers.has(members[i])) {
+						continue;
+					}
+					else {
+						addedMembers.add(members[i]);
+						data.nodes.push({id: members[i], label: members[i]});
+						for (let j = i + 1; j < members.length; j++) {
+							data.edges.push({source: members[i], target: members[j]});
+						}
+
+					}
+				}
 			}
 		}
-
-		
-		
-	
+	}
 
 	$: {
 		// console.log(percentage);
@@ -206,9 +248,6 @@
 
 		}
 		return finalMembersHTML
-
-
-
 
 	}
 
@@ -337,7 +376,18 @@
 
 
 		try {
-			const submit = await fetch(`https://stengthn.herokuapp.com/user/group/${id}`, {
+			const submit = await post({
+				path: `user/group/${id}`, 
+				data: {
+					loc: locationAA,
+					startTime: startTimeA,
+					endTime: endTimeA,
+					date: fixDateSubmit(dateA),
+					groupName: groupNameA
+				},
+				token: $jwt
+			});
+			/*await fetch(`https://stengthn.herokuapp.com/user/group/${id}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -350,7 +400,7 @@
 					date: fixDateSubmit(dateA),
 					groupName: groupNameA
 				}),
-			});
+			});*/
 
 			
 			
@@ -429,6 +479,9 @@
 				{/each}
 			{/if}
 		</div>
+		<div>
+			<Modal />
+		</div>
 		</div>
 		<div class="yourStrengthSection" >
 			<h3 class="topText">Your Strength</h3>
@@ -436,7 +489,7 @@
 			<div class="percentage"><p><span style="font-size: 42px">{percentage}%</span> Group Met</p></div>
 		</div>
 		<div>
-			<img alt="network" src="/network.png" />
+			<G6Component {G6} {options} {data} />
 		</div>
 	</div>
 	<div class="cardHead">

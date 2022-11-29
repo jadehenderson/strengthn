@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import { jwt } from "./jwt";
-
+import { get } from '../lib/api'
 
 export const groupsStore = writable({});
 
@@ -13,13 +13,14 @@ export const loadGroupsStore = async () => {
     })
 	
         try {
-            const groupsfetch = await fetch("https://stengthn.herokuapp.com/user/groups", {
+            const groupsfetch = await get('user/groups', njwt);
+            /*await fetch("https://stengthn.herokuapp.com/user/groups", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
                     "token": JSON.stringify(njwt)
                 },
-            });
+            });*/
     
             const groupsfetched = await groupsfetch.json();
 

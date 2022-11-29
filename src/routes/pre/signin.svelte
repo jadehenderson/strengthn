@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { jwt } from '/src/stores/jwt.js';
 	import { fade, slide, scale, fly } from 'svelte/transition';
+	import { post } from '../../lib/api';
 	let email;
 	let password;
 
@@ -36,7 +37,14 @@
 
 	const submitForm = async () => {
 		try {
-			const submit = await fetch('https://stengthn.herokuapp.com/auth/login/', {
+			const submit = await post({
+				path: 'auth/login/',
+				data: {
+					email,
+					password
+				}
+			});
+			/*await fetch('https://stengthn.herokuapp.com/auth/login/', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -45,7 +53,7 @@
 					email,
 					password
 				})
-			});
+			});*/
 
 			const predata = await submit;
 			// console.log('predata', predata);

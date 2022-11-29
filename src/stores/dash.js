@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import { jwt } from "./jwt";
 import { userID } from "./userid"
+import { get } from '../lib/api'
 
 export const dash = writable({});
 
@@ -11,13 +12,14 @@ export const loadDash = async () => {
             njwt = value;
         })
 
-        const submit = await fetch("https://stengthn.herokuapp.com/user/home", {
+        const submit = await get('user/home', njwt);
+        /*await fetch("https://stengthn.herokuapp.com/user/home", {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
                 "token": JSON.stringify(njwt)
             },
-        });
+        });*/
 
         const data = await submit.json();
         const parsedData = JSON.parse(data);
