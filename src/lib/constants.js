@@ -1,5 +1,5 @@
 const scheme = 'https'
-const hostname = 'stengthn.herokuapp.com'
+const hostname = 'strengthnbackend.vercel.app'
 const portnumber = ''
 
 let basearray = [scheme, '://', hostname];

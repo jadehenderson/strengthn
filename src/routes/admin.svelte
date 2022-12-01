@@ -60,7 +60,7 @@
 			// );
 			return json;
 		} catch (err) {
-			console.log(err);
+			console.log(err, json);
 		}
 	};
 	function reveal() {
