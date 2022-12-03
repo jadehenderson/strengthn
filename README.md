@@ -73,6 +73,11 @@ Uses Heroku Postgres for cloud database
 Is continuous integration or continuous deployment enabled? If so, where does it live?
 Yes, everytime you push to main Heroku restarts build
 
+## How to Demo the App
+
+Seeing that we were unable to deploy to Carolina Cloud Apps due to time restrains, we have hosted our backend on Vercel purely for **demonstration** purposes to show our app locally. For instructions on how to run Strength^N locally, please refer to our tutorial video listed on our project website under the "[client videos](https://tarheels.live/comp523teamjrme/client-videos/)" page. 
+
+
 ## Technologies used
 
 - Heroku
